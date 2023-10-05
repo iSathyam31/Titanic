@@ -1,0 +1,143 @@
+---
+title: "**Titanic Analysis**"
+author: "Sathyam A"
+date: "2023-10-05"
+output: html_document
+---
+# Titanic Survivors Analysis
+In this analysis, we explore the Titanic data set to understand the factors that influenced the survival of passengers on the Titanic. We will use R and various data visualization techniques to gain insights into the data and draw meaningful conclusions
+
+**Initial Steps followed**
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+* First we have installed the tidyverse package and load it with the library() function 
+    This is because we wanted to use the dplyr for mutating the data set
+
+* Then we load the .csv file in df from our local system then we mutate the column
+
+```{r}
+df <- read.csv("C:\\Users\\Admin\\Desktop\\Excel Data Sets\\DataSets 2\\Titanic.csv")
+View(df)
+
+df <- df %>%
+  mutate(survived = as.character(survived)) #Changing the data type of survived
+```
+
+
+## The Analysis and Visualization Part
+
+**Survival Rate Overview:**
+
+*The first bar chart shows the overall survival rates on a binary scale (0 for not survived, 1 for survived).
+
+*It appears that more passengers did not survive (0) than those who survived (1), indicating a higher mortality rate
+
+```{r}
+ggplot(df , aes(x = survived , fill = survived))+ 
+  scale_fill_manual(values = c("1" = "#7D7C7C" , "0" = "#191717")) +
+  geom_bar() + labs(x = "Survival rate on 0 and 1",
+                    y = "Passenger count",
+                    title = "Titanic survival rates")
+```
+
+**Survival Rate by Gender:**
+
+* The second bar chart illustrates the survival rates by gender (male and female).
+
+* It's clear that more females survived compared to males, suggesting that gender had a significant influence on survival.
+
+```{r}
+ggplot(data = df) +geom_bar(mapping = aes(x = sex , fill = survived))+
+  scale_fill_manual(values = c("1" = "#186F65" , "0" = "#B5CB99")) +
+  labs(y = "Passenger count",
+       title = "Titanic survival rates by sex")
+```
+**Survival Rate by Passenger Class:**
+
+* The third bar chart presents the survival rates categorized by passenger class (1st, 2nd, and 3rd class).
+
+* Passengers in the 1st class had a higher survival rate compared to those in the 2nd and 3rd classes.
+
+```{r}
+ggplot(data = df) + geom_bar(mapping = aes(x = class , fill = survived))+
+  scale_fill_manual(values = c("1" = "#94A684" , "0" = "#AEC3AE")) +
+  labs(title = "Titanic survival rates by class")
+
+```
+**Age Distribution:**
+
+* The histogram reveals the distribution of passenger ages on the Titanic.
+
+* Most passengers were in the age range of 20 to 30 years.
+
+```{r}
+ggplot(data = df) + geom_histogram(mapping = aes(x = age) , fill = "#5C5470", binwidth = 5)+
+  labs(y = "Passenger count",
+       x = "Age",
+       title = "Age distribution")
+```
+**Survival Rates by Age, Class, and Sex:**
+
+* The density plot with facets (subplots) shows the survival rates by age, class, and sex.
+
+* It suggests that survival rates varied across age groups, with some peaks and variations.
+
+* In general, it appears that females in the 1st and 2nd classes had higher survival rates across different age groups
+
+```{r}
+ggplot(data = df) + geom_density(mapping = aes(x = age , fill = survived , alpha = 0.3)) +
+  facet_grid(sex~class) + scale_fill_manual(values = c("1" = "#001524" , "0" = "#445D48")) + labs(y = "Age",
+                               x = "Survived",
+                               title = "Survival rates by Age, Class, Sex")
+```
+**Survival Rates by Age:**
+
+* The box plot illustrates the distribution of ages for both survivors and non-survivors.
+
+*It shows that the median age of survivors is slightly lower than that of non-survivors. Additionally, there are some outliers among the survivors.
+
+```{r}
+ggplot(data = df) + geom_boxplot(mapping = aes(x = survived , y = age)) +
+  labs(y = "Age",
+       x = "Survived",
+       title = "Rates by age")
+```
+**Survival rates by Embarkation point , Class and Sex**
+
+* This a bar plot depicting the survival rates of Titanic passengers. The data is grouped by the embarkation point, passenger class, and sex.
+
+```{r}
+ggplot(data= df) + geom_bar(mapping = aes(x = embarked , fill = survived)) + 
+  scale_fill_manual(values = c("1" = "#C1D8C3" , "0" = "#6A9689")) +
+  facet_grid(sex~class) + labs(x = "Enbarked Point" , y = "Passesnger Count" , title = "Survival rates by Embarkation point , Class and Sex")
+```
+
+**Survival rates by Alone Status and Gender**
+* This bar graph plot tell the survival rates of the people who were alone and who had come with their
+   family , friends or any known person
+   
+```{r}
+ggplot(data = df) + geom_bar(mapping = aes(x = alone , fill = survived) , position = "dodge") +
+  facet_wrap(~sex) + scale_fill_manual(values = c("1" = "#DAC0A3" , "0" = "#102C57")) +
+  labs(y = "Count of Passesngers" , x = "Passesnger Alone" , title = "Survival rates by Sex and Alone Status")
+```
+   
+## Some key Insights
+
+* Among Male and Female, Female had higher surviving rate.
+* 61% people died whereas 38% has survived in titanic disaster.
+* Third class passengers has died the most among the other two class passengers. 
+* Male third class passengers had more death rate than among all the genders and class.
+* Highest survival rate is among female first class passengers.
+* Maximum number of men and women have lost their lives who had embarked from Southampton and 
+  those were from the third class
+* Men passengers who traveled alone had lost the lives more
+
+
+
+
+
